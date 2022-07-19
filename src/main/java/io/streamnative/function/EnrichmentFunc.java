@@ -1,5 +1,6 @@
 package io.streamnative.function;
 
+import io.streamnative.datagen.CrateDBDataSource;
 import io.streamnative.datagen.H2LookupStationData;
 import io.streamnative.model.Sensor;
 import io.streamnative.model.SensorEnriched;
@@ -12,26 +13,30 @@ import org.apache.pulsar.shade.org.apache.commons.lang3.SerializationUtils;
 
 import java.util.Collections;
 
-public class EnrichmentFunc implements Function<Sensor, Void> {
+public class EnrichmentFunc implements Function<Sensor, byte[]> {
 
  @Override
- public Void process(Sensor input, Context context) {
+ public byte[] process(Sensor input, Context context) {
   System.out.println("STATION ID: "+input.getStationId());
   H2LookupStationData h2LookupStationData = new H2LookupStationData();
   SensorEnriched sensorEnriched1 = null;
   byte[] b = null;
      try {
+      // H2
       StationData stationData = h2LookupStationData.lookupStationData(input.getStationId());
+      // Crate
+      //CrateDBDataSource crateDBDataSource = new CrateDBDataSource();
+      //StationData stationData = crateDBDataSource.getStationData(input.getStationId());
       sensorEnriched1 = extracted(input, stationData);
       System.out.println(sensorEnriched1);
       // Publish to output topic
-      context.publish("sensor_readings_enriched", sensorEnriched1);
-      //b = SerializationUtils.serialize(sensorEnriched1);
-      System.out.println("b => "+sensorEnriched1);
+      //context.publish("sensor_readings_enriched", sensorEnriched1);
+      b = SerializationUtils.serialize(sensorEnriched1);
+      //System.out.println("b => "+sensorEnriched1);
   } catch (Exception e) {
       e.printStackTrace();
   }
-     return null;
+     return b;
  }
 
     private SensorEnriched extracted(Sensor input, StationData stationData) {

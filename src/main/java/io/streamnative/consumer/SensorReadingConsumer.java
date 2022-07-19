@@ -1,8 +1,9 @@
 package io.streamnative.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.streamnative.model.Sensor;
 import org.apache.pulsar.client.api.*;
+import org.apache.pulsar.shade.com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.HashMap;
 import java.util.Map;
 

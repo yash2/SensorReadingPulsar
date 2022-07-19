@@ -1,9 +1,9 @@
 package io.streamnative.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.streamnative.model.Sensor;
 import io.streamnative.model.SensorEnriched;
 import org.apache.pulsar.client.api.*;
+import org.apache.pulsar.shade.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +32,7 @@ public class SensorEnrichedConsumer {
             .subscriptionName("sensor-subscription-2")
             .messageListener(messageListener)
             .subscribe();
+
     public SensorEnrichedConsumer() throws PulsarClientException {
     }
 

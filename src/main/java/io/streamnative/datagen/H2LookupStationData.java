@@ -7,10 +7,12 @@ import java.sql.*;
 public class H2LookupStationData {
 
     public StationData lookupStationData(String stationId) throws SQLException {
-        String url = "jdbc:h2:mem:sensor";
+        final String url = "jdbc:h2:mem:sensor";
+        //final String JDBC_DRIVER = "org.h2.Driver";
         Connection connection = null;
         StationData stationData = null;
          try {
+            //Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(url);
             System.out.println("connected");
             String sqlWhereClause = "select * FROM station_data where station_id = '"+stationId+"'";
@@ -27,7 +29,11 @@ public class H2LookupStationData {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
+        } catch (Exception e) {
+             //throw new RuntimeException(e);
+             System.out.println("NOT FOUND");
+             e.printStackTrace();
+         } finally {
             if (connection != null)
                 connection.close();
         }
